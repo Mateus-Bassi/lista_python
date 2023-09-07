@@ -7,9 +7,34 @@ def Cria_tabuleiro(tabuleiro): #mostra o tabuleiro
     system("cls") # Limpa a tela
     for i in tabuleiro:
         for elem in i:
-            print(elem + "  ", end = '')
+            print(elem + "  ", end = '')# Faz o print do tabuleiro formatado
         print()
     
+def verificar_vitoria(tabuleiro):
+    #Verificar linha
+    for i in tabuleiro: # i e sua linha 
+        if len(set(i)) == 1 and i[0]!='-':
+            return True
+    #Verificar Coluna
+    for j in range(len(tabuleiro[0])): #j e a quantidade de colunas
+        coluna = [tabuleiro[i][j] for i in range(len(tabuleiro))]
+        if len(set(coluna)) == 1 and coluna[0] != '-':
+            return True
+    
+    #Verificar diagonal1
+    for i in range(len(tabuleiro[0])):
+        diagonal1 = [tabuleiro[j][j] for j in range(len(tabuleiro[0]))]
+        if len(set(diagonal1)) == 1 and diagonal1[0] !='-':
+            return True
+        
+    #Verificar diagonal2
+    for i in range(len(tabuleiro[0])):#quantidade de colunas
+        diagonal_invertida = [tabuleiro[i][len(tabuleiro) - i - 1] for i in range(len(tabuleiro))]
+        if len(set(diagonal_invertida)) == 1 and diagonal_invertida[0] != '-':
+            return True
+        
+    return False   
+
 def jogo_da_velha():# Jogo
     tabuleiro = [["-" for _ in range(4)] for _ in range(4 )] # Cria o tabuleiro
     Cria_tabuleiro(tabuleiro)# Chama o visual do tabuleiro
@@ -41,6 +66,11 @@ def jogo_da_velha():# Jogo
             # Mostra o tabuleiro
             Cria_tabuleiro(tabuleiro)
 
+            if verificar_vitoria(tabuleiro) == True:
+                #Alguem ganhou
+                print(f"O jogador {jogador_atual} Ganhou")
+                break
+            
             # Mostra 
             jogador_atual = 'O' if jogador_atual == 'X' else 'X' 
         except ValueError:
