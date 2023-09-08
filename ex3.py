@@ -1,61 +1,68 @@
-"""
-Desenvolver o jogo https://term.ooo/ a partir do arquivo lista_palavras.txt. O jogo deve serjogado por meio do terminal, mantendo a lógica do jogo original. Devem aparecer as letras quejá foram descobertas, as letras já tentadas no teclado e assim por diante. Atente-se àformatação
+import random
+import os
 
-"""
-import random #biblioteca aleatoria
-from os import system # comandos do sistema
+# Limpa o terminal
+os.system("cls")
 
-
-system("cls") # limpa o terminal
-
-arquivo = "lista_palavras.txt" # altere o caminho se necessário
-                               # o ideal é que esteja no mesmo diretório do programa
+# Caminho do arquivo de palavras
+arquivo = "lista_palavras.txt"
 
 def le_arquivo(arq):
-    """ Lê arquivo especificado e retorna uma lista com todas as linhas """    
+    """ Lê o arquivo especificado e retorna uma lista com todas as linhas """
     with open(arq, encoding="UTF-8") as f:
-        return [linha.strip() for linha in f] # método strip remove o '\n' do final da linha
+        return [linha.strip() for linha in f]
 
 lista = le_arquivo(arquivo)
-#print(lista) # descomente para verificar se a lista está correta
 
-quanti_len = int(input("Qual da quantiade de letras?")) # tamanho da palavra
+quanti_len = int(input("Qual é o tamanho da palavra que deseja adivinhar? "))
 
-lista_criada = []
+# Filtra as palavras do tamanho especificado
+lista_criada = [palavra for palavra in lista if len(palavra) == quanti_len]
 
-for i in range(0,1000):
-    if quanti_len == len(lista[i]):
-        lista_criada.append(lista[i])
+# Limpa o terminal novamente
+os.system("cls")
 
-system("cls") # Limpa o terminal, mas precisa importar a blib. "from os import system"
-
-# --------------------------------------------------------------------------------------------------------
-
-
-palavra=random.choice(lista_criada) # Define a palavra escolhida
-erros_quant = quanti_len * 2 # quanditade de erros que opde ser 
-
-# Reposta print(palavra)
+# Escolhe uma palavra aleatória da lista
+palavra = random.choice(lista_criada)
+erros_quant = quanti_len * 2  # Número máximo de erros permitidos
 
 list_tentativas = []
+letras_nao_utilizadas = list('abcdefghijklmnopqrstuvwxyz')  # Todas as letras do alfabeto inicialmente
+
 while True:
+    if erros_quant > 0:
+        print(f"Você tem um total de {erros_quant} tentativas restantes.\n")
+        print("Palavras tentadas:", ", ".join(list_tentativas))
+        print("Letras não utilizadas:", ", ".join(letras_nao_utilizadas))
         
-        if erros_quant > 0: # Verifica quantas jogadas ainda tem (Esta funcionando)
-            print(f"Você tem um total de um total de {erros_quant}\n")
-            print("Palavras tentadas:")
-            # imprime lista que dos chutes 
-            
-            tentativa = list(input("Digite uma palavra: "))
-            if (len(tentativa)>quanti_len or len(tentativa)<quanti_len):
-                print("Tentativa invalida, tente novamente")
-            else:
-                if list(tentativa) == palavra:
-                    print("parabens voce ganhou")
-                else:
-                    # mostra a quantidade de erros 
-                    list_tentativas.append(tentativa)
-                    print("voce errou tente novamente")
-                    erros_quant -= 1
+        tentativa = input("Digite uma palavra: ")
+        
+        if len(tentativa) != quanti_len: # Palavra digitada tem mais caracteres (listas)
+            print("Tentativa inválida. A palavra deve ter exatamente", quanti_len, "letras.")
         else:
-             print("fim de jogo, YOU LOSE")
-             break
+            list_tentativas.append(tentativa)
+            if tentativa == palavra: # Certou e ganhou o jogo
+                print("Parabéns! Você acertou a palavra:", palavra)
+                break
+            else:
+                letras_corretas = [] #list com as letras corretas 
+                letras_incorretas = [] # List com letras erradas que serao removidas do letras_nao_utilizadas
+                for i in range(quanti_len):
+                    if tentativa[i] == palavra[i]:
+                        letras_corretas.append(tentativa[i])
+                    elif tentativa[i] in palavra:
+                        letras_incorretas.append(tentativa[i])
+                
+                if letras_corretas:
+                    print("Letras corretas no lugar certo:", " ".join(letras_corretas))
+                
+                if letras_incorretas:
+                    print("Letras corretas no lugar errado:", " ".join(letras_incorretas))
+                
+                letras_utilizadas = set(tentativa)
+                letras_nao_utilizadas = [letra for letra in letras_nao_utilizadas if letra not in letras_utilizadas] # Atualiza as letras 
+                
+                erros_quant -= 1 # diminui a quantidade de tentativas restantes
+    else:
+        print("Fim de jogo! Você perdeu. A palavra era:", palavra) # Voce perdeu o jogo
+        break
