@@ -1,3 +1,12 @@
+
+"""
+O jogo e bem simples vou das uma explicação básica sobre as funções presentes:
+Funçoes:
+"le_arquivo" - Apenas le um arquivo .txt com varias palavras para fazer a escolha random (Fornecido pelo professor)
+"main" - Aqui acontece todo o jogo 
+
+"""
+
 import random
 import os
 
@@ -30,7 +39,7 @@ list_tentativas = []
 letras_nao_utilizadas = list('abcdefghijklmnopqrstuvwxyz')  # Todas as letras do alfabeto inicialmente
 
 while True:
-    if erros_quant > 0:
+    if erros_quant > 0: # Verifica a quantidade de erros  que ainda tem e se forem maior 
         print(f"Você tem um total de {erros_quant} tentativas restantes.\n")
         print("Palavras tentadas:", ", ".join(list_tentativas))
         print("Letras não utilizadas:", ", ".join(letras_nao_utilizadas))

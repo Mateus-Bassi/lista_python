@@ -1,10 +1,18 @@
 """
 Crie um jogo da velha NxN em que o usuário deve definir as dimensões do tabuleiro (sempre quadrado)
 
+O jogo e bem simples vou das uma explicação básica sobre as funções presentes:
+Funçoes
+“Criar_tabuleiro” - faz apenas a criacao visual do tabuleiro 
+"Verificar_vitorio" - a cada jogada faz a verificacao se o Usuario da vez ganhou
+"Jogo_da_velha" - faz o jogo acontecendo dentro de um while ate ter um vencedor
+"tamanho_do_tabuleiro" - esta funcao apenas determina o tamanho do tabuleiro 
+"main"- apenas executa a funcao jogo_da_velha
+
 """
 from os import system
 
-def Cria_tabuleiro(tabuleiro): #mostra o tabuleiro
+def Cria_tabuleiro(tabuleiro): #mostra o tabuleiro (visual apenas)
     system("cls") # Limpa a tela
     for i in tabuleiro:
         for elem in i:
@@ -48,7 +56,7 @@ def tamanho_tabuleiro(): # Cria o tamanho do tabuleiro editavel
             print("Digite um valor valido ...")
 
 
-def jogo_da_velha():# Jogo
+def jogo_da_velha():# Jogo acontece dentro do while o jogo inteiro
     tamanho =tamanho_tabuleiro()
     tabuleiro = [["-" for _ in range(tamanho)] for _ in range(tamanho)] # Cria o tabuleiro
     Cria_tabuleiro(tabuleiro)# Chama o visual do tabuleiro
@@ -85,7 +93,7 @@ def jogo_da_velha():# Jogo
                 print(f"O jogador {jogador_atual} Ganhou")
                 break
 
-            # Mostra 
+            # Mostra quem e o jogador da vez
             jogador_atual = 'O' if jogador_atual == 'X' else 'X' 
         except ValueError:
             print("Valor invalido tente novamente")
